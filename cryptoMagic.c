@@ -1,3 +1,4 @@
+//todo get the 'TT' to show up during the encryption, and also fix the weird bug with decrypting
 #include <stdio.h>
 #include <string.h>
 int hextoDecimal(char hex);
@@ -61,7 +62,7 @@ void encryptFile(char *filename) {
       int outChar = line[i];
 
       if (outChar == 9) {
-        fwrite("TT", sizeof(char), 2, outputFile); //write(what, of what, max times, where)
+        fwrite("TT", sizeof(char), 2, outputFile); //write(what, of what size, max times, where)
         continue;
       }
 
@@ -91,6 +92,7 @@ void decryptFile(char *filename) {
   char *basefile = strtok(filename, ".");
   char *finalfile = strcat(basefile, ".txt");
 
+  //create new .txt file
   FILE *outputFile = fopen(finalfile, "w+");
 
   char line[255];
@@ -101,7 +103,9 @@ void decryptFile(char *filename) {
       if (line[i] == 'T' && line[i + 1] == 'T') {
         outChar = 9;
         i += 1;
-      } else {
+            fprintf(outputFile, "%c", outChar);
+      } 
+      else {
         outChar = hextoDecimal(line[i]) * 16;
         i += 1;
         outChar += hextoDecimal(line[i]);
@@ -112,14 +116,10 @@ void decryptFile(char *filename) {
         }
       }
 
-      char result = outChar;
-
-      fprintf(outputFile, "%c", result);
+      fprintf(outputFile, "%c", outChar);
     }
-
     fwrite("\n", sizeof(char), 1, outputFile);
     outputFile = fopen(finalfile, "a+");
   }
-
   fclose(file);
 }
