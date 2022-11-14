@@ -1,11 +1,8 @@
-//todo get the 'TT' to show up during the encryption, and also fix the weird bug with decrypting
 #include <stdio.h>
 #include <string.h>
 int hextoDecimal(char hex);
 void encryptFile(char *filename);
 void decryptFile(char *filename);
-
-//Main is working as intended, Everything after is just minor bugs
 
 int main(int argc, char **argv) {
   if (argc == 3) {
@@ -21,17 +18,17 @@ int main(int argc, char **argv) {
 
 //(hextoDecimal char) converts characters from a-f to hexidecimal values
 int hextoDecimal(char hex) {
-  if (hex == 'a') {
+  if (hex == 'A') {
     return 10;
-  } else if (hex == 'b') {
+  } else if (hex == 'B') {
     return 11;
-  } else if (hex == 'c') {
+  } else if (hex == 'C') {
     return 12;
-  } else if (hex == 'd') {
+  } else if (hex == 'D') {
     return 13;
-  } else if (hex == 'e') {
+  } else if (hex == 'E') {
     return 14;
-  } else if (hex == 'f') {
+  } else if (hex == 'F') {
     return 15;
   } else {
     return hex - '0';
@@ -44,16 +41,17 @@ void encryptFile(char *filename) {
   char *basefile;
   char *finalfile;
 
-  // Renames file
+  // Renames file *************************************************
   if (file == NULL) {
     printf("Input file does not exist");
     return;
   } else {
     basefile = strtok(filename, "."); // returns back with the first token
-    finalfile = strcat(basefile, ".crp"); // take the token and add .crp at the end
+    finalfile =
+        strcat(basefile, ".crp"); // take the token and add .crp at the end
   }
 
-  char line[120]; //lines are guaranteed to have 120 characters or less
+  char line[120]; // lines are guaranteed to have 120 characters or less
 
   outputFile = fopen(finalfile, "w+");
 
@@ -62,7 +60,7 @@ void encryptFile(char *filename) {
       int outChar = line[i];
 
       if (outChar == 9) {
-        fwrite("TT", sizeof(char), 2, outputFile); //write(what, of what size, max times, where)
+        fwrite("TT", sizeof(char), 2, outputFile); // write(what, of what size, max times, where)
         continue;
       }
 
@@ -79,7 +77,8 @@ void encryptFile(char *filename) {
     }
 
     fwrite("\n", sizeof(char), 1, outputFile);
-    outputFile = fopen(finalfile, "a+"); //unlike "w" that overwrites, "a" continues, and + r and w
+    outputFile =
+        fopen(finalfile,"a+"); // unlike "w" that overwrites, "a" continues, and + r and w
   }
 
   fclose(file);
@@ -92,7 +91,7 @@ void decryptFile(char *filename) {
   char *basefile = strtok(filename, ".");
   char *finalfile = strcat(basefile, ".txt");
 
-  //create new .txt file
+  // create new .txt file
   FILE *outputFile = fopen(finalfile, "w+");
 
   char line[255];
@@ -103,9 +102,8 @@ void decryptFile(char *filename) {
       if (line[i] == 'T' && line[i + 1] == 'T') {
         outChar = 9;
         i += 1;
-            fprintf(outputFile, "%c", outChar);
-      } 
-      else {
+        fprintf(outputFile, "%c", outChar);
+      } else {
         outChar = hextoDecimal(line[i]) * 16;
         i += 1;
         outChar += hextoDecimal(line[i]);
