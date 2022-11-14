@@ -4,6 +4,8 @@ int hextoDecimal(char hex);
 void encryptFile(char *filename);
 void decryptFile(char *filename);
 
+//Main is working as intended, Everything after is just minor bugs
+
 int main(int argc, char **argv) {
   if (argc == 3) {
     if (strcmp(argv[1], "-E") == 0) {
@@ -76,7 +78,7 @@ void encryptFile(char *filename) {
     }
 
     fwrite("\n", sizeof(char), 1, outputFile);
-    outputFile = fopen(finalfile, "a+");
+    outputFile = fopen(finalfile, "a+"); //unlike "w" that overwrites, "a" continues, and + r and w
   }
 
   fclose(file);
